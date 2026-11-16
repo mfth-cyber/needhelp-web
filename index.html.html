@@ -6,11 +6,11 @@
     <title>INEEDHELP — WoW: Forever Power Leveling & Secure Checkout</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter & Rajdhani for Gaming Headers -->
+    <!-- Google Fonts: Inter & Rajdhani -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for Icons -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <script>
@@ -44,8 +44,6 @@
             color: #e2e8f0;
             overflow-x: hidden;
         }
-
-        /* Custom Range Slider Styling */
         input[type="range"] {
             -webkit-appearance: none;
             appearance: none;
@@ -56,7 +54,6 @@
             outline: none;
             cursor: pointer;
         }
-
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
@@ -69,12 +66,10 @@
             cursor: pointer;
             transition: transform 0.15s ease, background-color 0.15s ease;
         }
-
         input[type="range"]::-webkit-slider-thumb:hover {
             transform: scale(1.15);
             background: #fbbf24;
         }
-
         input[type="range"]::-moz-range-thumb {
             width: 22px;
             height: 22px;
@@ -85,11 +80,9 @@
             cursor: pointer;
             transition: transform 0.15s ease, background-color 0.15s ease;
         }
-
         .hero-glow {
             background: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.12) 0%, rgba(6, 182, 212, 0.05) 40%, rgba(11, 14, 20, 0) 75%);
         }
-
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
             -webkit-appearance: none; 
@@ -99,27 +92,38 @@
 </head>
 <body class="antialiased selection:bg-amber-500 selection:text-black">
 
-    <!-- CONFIGURATION & 50% HIGHER PRICE BRACKETS -->
+    <!-- CONFIGURATION & PRICING ENGINE (Base Price + Step Increments + Promo Discount) -->
     <script>
         const CONFIG = {
             brandName: "INEEDHELP",
             currencySymbol: "$",
-            // Harga dasar per level dinaikkan 50% dari sebelumnya
-            pricePerLevel: {
-                tier1_20: 0.90,   // Sebelumnya 0.60
-                tier21_40: 1.65,  // Sebelumnya 1.10
-                tier41_50: 2.70,  // Sebelumnya 1.80
-                tier51_60: 4.13   // Sebelumnya 2.75
+            launchDiscountPercent: 10, // Diskon promo 10% di ringkasan akhir
+            basePriceDiscount: 0.90,   // Base price diturunkan 10% (dikali 0.9)
+            
+            // Harga Dasar Awal (Argo Awal berdasarkan Level Mulai)
+            startingBasePrice: {
+                tier1: 61,  // Level 1 - 9
+                tier10: 60, // Level 10 - 19
+                tier20: 63, // Level 20 - 29
+                tier30: 70, // Level 30 - 39
+                tier40: 73, // Level 40 - 49
+                tier50: 80  // Level 50 - 59
             },
-            hoursPerLevel: {
-                tier1_20: 0.35,
-                tier21_40: 0.75,
-                tier41_50: 1.30,
-                tier51_60: 2.20
+
+            // Kenaikan per level bertahap
+            stepIncrements: {
+                tier1_10: 1,   // 1 ke 10 naik $1 per level
+                tier10_20: 1,  // 10 ke 20 naik $1 per level
+                tier20_30: 3,  // 20 ke 30 naik $3 per level
+                tier30_35: 9,  // 30 ke 35 naik $9 per level
+                tier35_40: 10, // 35 ke 40 naik $10 per level
+                tier40_50: 13, // 40 ke 50 naik $13 per level
+                tier50_60: 20  // 50 ke 60 naik $20 per level
             },
+
             addons: {
-                expressMultiplier: 0.25, 
-                streamMultiplier: 0.10   
+                expressMultiplier: 0.30, 
+                streamMultiplier: 0.15   
             }
         };
     </script>
@@ -127,7 +131,6 @@
     <!-- NAVBAR -->
     <header class="sticky top-0 z-40 bg-[#0b0e14]/90 backdrop-blur-md border-b border-borderSubtle">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <!-- Brand Logo -->
             <a href="#" class="flex items-center gap-2.5 group">
                 <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform">
                     <i class="fa-solid fa-bolt text-black text-lg"></i>
@@ -137,7 +140,6 @@
                 </span>
             </a>
 
-            <!-- Desktop Navigation -->
             <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
                 <a href="#calculator" class="hover:text-amber-400 transition-colors">Power Leveling</a>
                 <a href="#guarantees" class="hover:text-amber-400 transition-colors">Why Us</a>
@@ -145,7 +147,6 @@
                 <a href="#faq" class="hover:text-amber-400 transition-colors">FAQ</a>
             </nav>
 
-            <!-- Secure Status Badge -->
             <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
                 <i class="fa-solid fa-lock text-xs"></i>
                 <span>SSL Secure Checkout</span>
@@ -153,27 +154,26 @@
         </div>
     </header>
 
-    <!-- HERO & INTERACTIVE CALCULATOR SECTION -->
+    <!-- HERO & CALCULATOR -->
     <main id="calculator" class="relative hero-glow pt-8 pb-16 sm:pt-12 sm:pb-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="mb-8">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold uppercase tracking-wider mb-3">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    WoW: Forever • Instant Web Checkout Active
+                    WoW: Forever • Launch Promo 10% OFF Active
                 </div>
                 <h1 class="font-gaming text-3xl sm:text-5xl font-bold text-white tracking-tight">
                     INEEDHELP — <span class="text-amber-500">Custom Power Leveling</span>
                 </h1>
                 <p class="mt-2 text-slate-400 text-sm sm:text-base max-w-2xl">
-                    Select your level range, fill in your account details, and complete your payment securely right here on the website.
+                    Select your exact level range. 100% hand-leveled by verified veteran boosters with country-matched VPN protection.
                 </p>
             </div>
 
-            <!-- MAIN GRID -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 
-                <!-- LEFT COLUMN: CONFIGURATION PANEL -->
+                <!-- LEFT COLUMN: CONTROLS -->
                 <div class="lg:col-span-7 space-y-6">
                     
                     <!-- Step 1: Character Details -->
@@ -189,11 +189,11 @@
                                 <div class="grid grid-cols-2 gap-2 bg-[#0b0e14] p-1 rounded-xl border border-borderSubtle">
                                     <button type="button" onclick="setRegion('US')" id="btn-region-US"
                                             class="region-btn py-2 rounded-lg text-sm font-semibold transition-all bg-amber-500 text-black shadow">
-                                        US / Americas
+                                        US Server
                                     </button>
                                     <button type="button" onclick="setRegion('EU')" id="btn-region-EU"
                                             class="region-btn py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-white transition-all">
-                                        Europe (EU)
+                                        EU Server
                                     </button>
                                 </div>
                             </div>
@@ -235,14 +235,17 @@
                         </div>
                     </div>
 
-                    <!-- Step 2: Custom Level Range Sliders -->
+                    <!-- Step 2: Level Range Sliders -->
                     <div class="bg-bgCard border border-borderSubtle rounded-2xl p-5 sm:p-6 shadow-xl">
-                        <div class="flex items-center justify-between mb-5">
+                        <div class="flex items-center justify-between mb-5 flex-wrap gap-2">
                             <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-2">
                                 <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs font-bold">2</span>
                                 Select Level Range
                             </h2>
                             <div class="flex gap-1.5">
+                                <button type="button" onclick="applyPreset(1, 10)" class="text-xs px-2.5 py-1 rounded-md bg-[#0b0e14] hover:bg-amber-500/20 border border-borderSubtle hover:border-amber-500/40 text-slate-300 hover:text-amber-400 transition-colors">
+                                    1 → 10
+                                </button>
                                 <button type="button" onclick="applyPreset(1, 60)" class="text-xs px-2.5 py-1 rounded-md bg-[#0b0e14] hover:bg-amber-500/20 border border-borderSubtle hover:border-amber-500/40 text-slate-300 hover:text-amber-400 transition-colors">
                                     1 → 60
                                 </button>
@@ -272,7 +275,7 @@
 
                             <div class="bg-[#0b0e14] p-4 rounded-xl border border-borderSubtle">
                                 <div class="flex items-center justify-between mb-3">
-                                    <label for="desiredLevelInput" class="text-sm font-medium text-slate-300">Desired Target Level</label>
+                                    <label for="desiredLevelInput" class="text-sm font-medium text-slate-300">Target Level</label>
                                     <div class="flex items-center gap-2">
                                         <span class="text-xs text-slate-500">LVL</span>
                                         <input type="number" id="desiredLevelInput" min="2" max="60" value="60"
@@ -286,7 +289,7 @@
                         </div>
                     </div>
 
-                    <!-- Step 3: Extra Options / Add-ons -->
+                    <!-- Step 3: Options -->
                     <div class="bg-bgCard border border-borderSubtle rounded-2xl p-5 sm:p-6 shadow-xl">
                         <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
                             <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs font-bold">3</span>
@@ -300,13 +303,13 @@
                                            class="w-4 h-4 rounded accent-amber-500 cursor-pointer">
                                     <div>
                                         <div class="text-sm font-semibold text-white flex items-center gap-2">
-                                            Express Priority Delivery
+                                            Express Delivery Speed
                                             <span class="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400">30% Faster</span>
                                         </div>
-                                        <p class="text-xs text-slate-400">Assigned immediately to top-speed booster shifts.</p>
+                                        <p class="text-xs text-slate-400">Priority queue with non-stop shift rotation.</p>
                                     </div>
                                 </div>
-                                <span class="text-sm font-bold text-amber-400">+25%</span>
+                                <span class="text-sm font-bold text-amber-400">+30%</span>
                             </label>
 
                             <label class="flex items-center justify-between p-3.5 rounded-xl bg-[#0b0e14] border border-borderSubtle hover:border-slate-600 cursor-pointer transition-colors">
@@ -314,11 +317,11 @@
                                     <input type="checkbox" id="addonStream" onchange="updateSummary()"
                                            class="w-4 h-4 rounded accent-amber-500 cursor-pointer">
                                     <div>
-                                        <div class="text-sm font-semibold text-white">Private Discord Live Stream</div>
-                                        <p class="text-xs text-slate-400">Watch your character level up live in private voice/screen share.</p>
+                                        <div class="text-sm font-semibold text-white">Piloted + Live Stream</div>
+                                        <p class="text-xs text-slate-400">Watch your character progress in real time via private stream.</p>
                                     </div>
                                 </div>
-                                <span class="text-sm font-bold text-slate-300">+10%</span>
+                                <span class="text-sm font-bold text-slate-300">+15%</span>
                             </label>
 
                             <label class="flex items-center justify-between p-3.5 rounded-xl bg-[#0b0e14] border border-emerald-500/30 cursor-pointer">
@@ -327,7 +330,7 @@
                                            class="w-4 h-4 rounded accent-emerald-500">
                                     <div>
                                         <div class="text-sm font-semibold text-white">Keep All Gold, BoEs & Quest Loot</div>
-                                        <p class="text-xs text-slate-400">Every single copper and item earned stays on your account.</p>
+                                        <p class="text-xs text-slate-400">100% of gold and items farmed stay on your character.</p>
                                     </div>
                                 </div>
                                 <span class="text-xs font-bold uppercase px-2 py-1 rounded bg-emerald-500/20 text-emerald-400">FREE</span>
@@ -337,19 +340,19 @@
 
                 </div>
 
-                <!-- RIGHT COLUMN: STICKY ORDER SUMMARY & CHECKOUT BUTTON -->
+                <!-- RIGHT COLUMN: SUMMARY CARD WITH 5 PAYMENT METHODS -->
                 <div class="lg:col-span-5 lg:sticky lg:top-24">
                     <div class="bg-bgCard border border-amber-500/30 rounded-2xl p-6 shadow-2xl shadow-black/50">
                         <div class="flex items-center justify-between pb-4 border-b border-borderSubtle">
                             <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Order Summary</span>
                             <span class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-400">
-                                <i class="fa-solid fa-shield-check"></i> Instant Checkout
+                                <i class="fa-solid fa-shield-check"></i> Escrow Protected
                             </span>
                         </div>
 
                         <div class="my-5 bg-[#0b0e14] rounded-xl p-4 border border-borderSubtle flex items-center justify-between">
                             <div>
-                                <span class="text-xs text-slate-400 block">Level Boost</span>
+                                <span class="text-xs text-slate-400 block">Selected Range</span>
                                 <div class="font-gaming text-2xl sm:text-3xl font-bold text-white mt-0.5">
                                     Level <span id="summaryStartLvl" class="text-slate-300">1</span>
                                     <i class="fa-solid fa-arrow-right text-amber-500 text-lg mx-1.5"></i>
@@ -365,8 +368,8 @@
 
                         <div class="space-y-2.5 text-sm pb-5 border-b border-borderSubtle">
                             <div class="flex justify-between">
-                                <span class="text-slate-400">Game / Service</span>
-                                <span class="font-medium text-white">WoW: Forever Leveling</span>
+                                <span class="text-slate-400">Game</span>
+                                <span class="font-medium text-white">World of Warcraft: Forever</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-slate-400">Region & Faction</span>
@@ -378,33 +381,43 @@
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-slate-400">Est. Completion</span>
-                                <span id="summaryEstTime" class="font-semibold text-cyan-400">~3 Days 12 Hours</span>
+                                <span id="summaryEstTime" class="font-semibold text-cyan-400">~4d 18h</span>
                             </div>
                         </div>
 
-                        <div class="py-5 flex items-end justify-between">
-                            <div>
-                                <span class="text-xs text-slate-400 block">Total Price (Updated)</span>
-                                <span class="text-[11px] text-slate-500">Fully encrypted web transaction</span>
+                        <div class="py-5 space-y-1">
+                            <div class="flex items-center justify-between text-xs text-slate-400">
+                                <span>Normal Subtotal:</span>
+                                <span id="summaryOriginalPrice" class="line-through">$0.00</span>
                             </div>
-                            <div class="text-right">
-                                <span id="summaryPrice" class="font-gaming text-4xl font-bold text-white">$127.13</span>
+                            <div class="flex items-center justify-between text-xs text-emerald-400 font-semibold">
+                                <span>Launch Promo (10% OFF):</span>
+                                <span>-10%</span>
+                            </div>
+                            <div class="flex items-end justify-between pt-2">
+                                <div>
+                                    <span class="text-xs text-slate-400 block">Final Total Due</span>
+                                    <span class="text-[11px] text-amber-400">Includes base discount & promo</span>
+                                </div>
+                                <div class="text-right">
+                                    <span id="summaryPrice" class="font-gaming text-4xl font-bold text-white">$0.00</span>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Direct Checkout Button -->
                         <button type="button" onclick="openCheckoutModal()"
                                 class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black font-bold text-base shadow-lg shadow-amber-500/25 transform active:scale-[0.99] transition-all flex items-center justify-center gap-2.5 cursor-pointer">
                             <i class="fa-solid fa-lock text-black text-sm"></i>
                             <span>Proceed to Secure Checkout</span>
                         </button>
 
-                        <div class="mt-4 pt-4 border-t border-borderSubtle/60 flex items-center justify-center gap-4 text-slate-500 text-xs">
-                            <span class="flex items-center gap-1"><i class="fa-brands fa-cc-visa text-blue-400"></i> Card</span>
-                            <span>•</span>
-                            <span class="flex items-center gap-1"><i class="fa-brands fa-bitcoin text-amber-500"></i> Crypto</span>
-                            <span>•</span>
-                            <span class="flex items-center gap-1"><i class="fa-brands fa-paypal text-blue-400"></i> PayPal</span>
+                        <!-- 5 Payment Methods Badge Icons -->
+                        <div class="mt-4 pt-4 border-t border-borderSubtle/60 grid grid-cols-5 gap-1 text-center text-[10px] text-slate-400">
+                            <div class="bg-[#0b0e14] py-1.5 rounded border border-borderSubtle"><i class="fa-brands fa-cc-visa text-blue-400 text-xs"></i><div class="mt-0.5">Card</div></div>
+                            <div class="bg-[#0b0e14] py-1.5 rounded border border-borderSubtle"><i class="fa-brands fa-apple text-white text-xs"></i><div class="mt-0.5">Apple Pay</div></div>
+                            <div class="bg-[#0b0e14] py-1.5 rounded border border-borderSubtle"><i class="fa-brands fa-paypal text-blue-400 text-xs"></i><div class="mt-0.5">PayPal</div></div>
+                            <div class="bg-[#0b0e14] py-1.5 rounded border border-borderSubtle"><i class="fa-solid fa-building-columns text-emerald-400 text-xs"></i><div class="mt-0.5">Wise/EU</div></div>
+                            <div class="bg-[#0b0e14] py-1.5 rounded border border-borderSubtle"><i class="fa-brands fa-bitcoin text-amber-500 text-xs"></i><div class="mt-0.5">Crypto</div></div>
                         </div>
                     </div>
                 </div>
@@ -418,7 +431,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto mb-12">
                 <h2 class="font-gaming text-3xl font-bold text-white">Why Players Trust <span class="text-amber-500">INEEDHELP</span></h2>
-                <p class="text-slate-400 text-sm mt-2">Your account security is our #1 priority. Every boost follows strict safety protocols.</p>
+                <p class="text-slate-400 text-sm mt-2">100% Money-Back Guarantee & Strict VPN Account Safety.</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -439,8 +452,8 @@
                 </div>
                 <div class="bg-bgCard border border-borderSubtle p-6 rounded-2xl">
                     <div class="w-11 h-11 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-headset"></i></div>
-                    <h3 class="font-bold text-white text-base mb-2">24/7 Support</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">Direct live chat assistance right on the platform anytime.</p>
+                    <h3 class="font-bold text-white text-base mb-2">24/7 Live Support</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">Instant order tracking and support right on our platform.</p>
                 </div>
             </div>
         </div>
@@ -462,14 +475,14 @@
                 <div class="relative bg-bgCard border border-borderSubtle p-6 rounded-2xl">
                     <span class="font-gaming text-5xl font-bold text-amber-500/15 absolute top-4 right-5">02</span>
                     <div class="text-amber-400 font-bold text-sm mb-2">STEP 2</div>
-                    <h3 class="text-lg font-bold text-white mb-2">Direct Web Payment</h3>
-                    <p class="text-slate-400 text-sm">Complete your payment securely on the website via Credit Card, Crypto, or PayPal.</p>
+                    <h3 class="text-lg font-bold text-white mb-2">Secure Web Payment</h3>
+                    <p class="text-slate-400 text-sm">Pay securely via Credit Card, Apple Pay, PayPal, Wise, or Crypto.</p>
                 </div>
                 <div class="relative bg-bgCard border border-borderSubtle p-6 rounded-2xl">
                     <span class="font-gaming text-5xl font-bold text-amber-500/15 absolute top-4 right-5">03</span>
                     <div class="text-amber-400 font-bold text-sm mb-2">STEP 3</div>
                     <h3 class="text-lg font-bold text-white mb-2">Order Activation</h3>
-                    <p class="text-slate-400 text-sm">A verified booster is assigned instantly and starts your leveling process.</p>
+                    <p class="text-slate-400 text-sm">A verified booster is assigned immediately after checkout.</p>
                 </div>
             </div>
         </div>
@@ -484,11 +497,11 @@
             <div class="space-y-3" id="faqContainer">
                 <div class="bg-bgCard border border-borderSubtle rounded-xl overflow-hidden">
                     <button type="button" onclick="toggleFaq(this)" class="w-full px-5 py-4 text-left flex items-center justify-between font-semibold text-white text-sm hover:text-amber-400 transition-colors">
-                        <span>How does the direct website payment work?</span>
+                        <span>What payment methods are supported?</span>
                         <i class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
                     </button>
                     <div class="hidden px-5 pb-4 text-xs sm:text-sm text-slate-400 border-t border-borderSubtle/50 pt-3">
-                        You can securely submit your payment on-site using major credit/debit cards, crypto (USDT/BTC), or PayPal. Your funds are held safely in escrow until service delivery.
+                        We support 5 secure global payment methods: Credit/Debit Cards, Apple Pay / Google Pay, PayPal, European Bank / Wise transfers, and Cryptocurrency (USDT/BTC).
                     </div>
                 </div>
             </div>
@@ -512,11 +525,9 @@
         </div>
     </footer>
 
-    <!-- ===================================================================== -->
-    <!-- SECURE WEB CHECKOUT MODAL                                            -->
-    <!-- ===================================================================== -->
+    <!-- CHECKOUT MODAL WITH 5 PAYMENT OPTIONS -->
     <div id="checkoutModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-        <div class="bg-bgCard border border-amber-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+        <div class="bg-bgCard border border-amber-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button type="button" onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
@@ -526,39 +537,37 @@
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <div>
-                    <h3 class="font-gaming text-xl font-bold text-white">Secure On-Site Checkout</h3>
-                    <p class="text-xs text-slate-400">Complete your order & payment directly on INEEDHELP</p>
+                    <h3 class="font-gaming text-xl font-bold text-white">Secure Global Checkout</h3>
+                    <p class="text-xs text-slate-400">Complete your payment securely on INEEDHELP</p>
                 </div>
             </div>
 
-            <!-- Order Summary Mini Box -->
             <div class="bg-[#0b0e14] border border-borderSubtle rounded-xl p-3.5 mb-4 text-xs space-y-2">
                 <div class="flex justify-between text-slate-300">
                     <span>Service:</span>
-                    <span class="font-semibold text-white">WoW Leveling (<span id="modalLvlRange">1 → 60</span>)</span>
+                    <span class="font-semibold text-white">WoW: Forever Leveling (<span id="modalLvlRange">1 → 60</span>)</span>
                 </div>
                 <div class="flex justify-between text-slate-300">
                     <span>Class / Region:</span>
                     <span id="modalClassRegion" class="font-semibold text-white">Mage • US • Horde</span>
                 </div>
                 <div class="flex justify-between border-t border-borderSubtle pt-2 text-sm font-bold text-amber-400">
-                    <span>Total Amount Due:</span>
-                    <span id="modalTotalPrice">$127.13</span>
+                    <span>Total Amount Due (Promo Applied):</span>
+                    <span id="modalTotalPrice">$0.00</span>
                 </div>
             </div>
 
-            <!-- Checkout Form -->
             <form onsubmit="handlePaymentSubmit(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Your Email (For Order Receipt & Updates)</label>
+                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Your Email (For Receipt & Live Tracking)</label>
                     <input type="email" required placeholder="gamer@gmail.com"
                            class="w-full bg-[#0b0e14] border border-borderSubtle focus:border-amber-500 rounded-xl px-4 py-2.5 text-sm text-white outline-none">
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Game Username / Email</label>
-                        <input type="text" required placeholder="Battle.net Username"
+                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Battle.net Username / Email</label>
+                        <input type="text" required placeholder="Account Login"
                                class="w-full bg-[#0b0e14] border border-borderSubtle focus:border-amber-500 rounded-xl px-4 py-2.5 text-sm text-white outline-none">
                     </div>
                     <div>
@@ -569,18 +578,32 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Select Payment Method</label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <label class="border border-amber-500 bg-amber-500/10 p-2.5 rounded-xl text-center cursor-pointer text-xs font-semibold text-white">
-                            <input type="radio" name="paymentMethod" checked class="hidden"> Credit Card
+                    <label class="block text-xs font-medium text-slate-400 mb-2">Select Payment Method (5 Global Options)</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        <label class="border border-amber-500 bg-amber-500/10 p-2.5 rounded-xl text-center cursor-pointer text-xs font-semibold text-white block">
+                            <input type="radio" name="paymentMethod" checked class="hidden"> Credit/Debit Card
                         </label>
-                        <label class="border border-borderSubtle bg-[#0b0e14] p-2.5 rounded-xl text-center cursor-pointer text-xs font-semibold text-slate-300 hover:border-slate-600">
-                            <input type="radio" name="paymentMethod" class="hidden"> Crypto (USDT)
+                        <label class="border border-borderSubtle bg-[#0b0e14] p-2.5 rounded-xl text-center cursor-pointer text-xs font-semibold text-slate-300 hover:border-slate-600 block">
+                            <input type="radio" name="paymentMethod" class="hidden"> Apple / Google Pay
                         </label>
-                        <label class="border border-borderSubtle bg-[#0b0e14] p-2.5 rounded-xl text-center cursor-pointer text-xs font-semibold text-slate-300 hover:border-slate-600">
+                        <label class="border border-borderSubtle bg-[#0b0e14] p-2.5 rounded-xl text-center cursor-pointer text-xs font-semibold text-slate-300 hover:border-slate-600 block">
                             <input type="radio" name="paymentMethod" class="hidden"> PayPal
                         </label>
+                        <label class="border border-borderSubtle bg-[#0b0e14] p-2.5 rounded-xl text-center cursor-pointer text-xs font-semibold text-slate-300 hover:border-slate-600 block">
+                            <input type="radio" name="paymentMethod" class="hidden"> Wise / EU Bank
+                        </label>
+                        <label class="border border-borderSubtle bg-[#0b0e14] p-2.5 rounded-xl text-center cursor-pointer text-xs font-semibold text-slate-300 hover:border-slate-600 block">
+                            <input type="radio" name="paymentMethod" class="hidden"> Crypto (USDT)
+                        </label>
                     </div>
+                </div>
+
+                <!-- Terms & Conditions Anti-Chargeback Checkbox -->
+                <div class="flex items-start gap-2 pt-1">
+                    <input type="checkbox" required id="tosCheck" class="mt-0.5 rounded accent-amber-500 cursor-pointer">
+                    <label for="tosCheck" class="text-[11px] text-slate-400 leading-relaxed cursor-pointer">
+                        I confirm that power leveling services are <span class="text-slate-200 font-medium">non-refundable</span> once work has started, and I agree to INEEDHELP Terms of Service.
+                    </label>
                 </div>
 
                 <button type="submit" id="payNowBtn"
@@ -608,7 +631,7 @@
         </div>
     </div>
 
-    <!-- INTERACTIVE LOGIC SCRIPT -->
+    <!-- CALCULATOR & LOGIC SCRIPT -->
     <script>
         let state = {
             region: 'US',
@@ -691,32 +714,59 @@
             document.getElementById('desiredLevelInput').value = state.desiredLevel;
         }
 
+        // Kalkulasi matematika harga berdasarkan starting base price + step increments + diskon
         function calculateBoostMetrics(startLvl, endLvl, isExpress, isStream) {
             let basePrice = 0;
             let baseHours = 0;
 
+            // Tentukan starting base price berdasarkan level awal
+            if (startLvl < 10) basePrice += CONFIG.startingBasePrice.tier1;
+            else if (startLvl < 20) basePrice += CONFIG.startingBasePrice.tier10;
+            else if (startLvl < 30) basePrice += CONFIG.startingBasePrice.tier20;
+            else if (startLvl < 40) basePrice += CONFIG.startingBasePrice.tier30;
+            else if (startLvl < 50) basePrice += CONFIG.startingBasePrice.tier40;
+            else basePrice += CONFIG.startingBasePrice.tier50;
+
+            // Tambahkan kenaikan per level bertahap
             for (let lvl = startLvl; lvl < endLvl; lvl++) {
-                if (lvl <= 20) {
-                    basePrice += CONFIG.pricePerLevel.tier1_20;
-                    baseHours += CONFIG.hoursPerLevel.tier1_20;
-                } else if (lvl <= 40) {
-                    basePrice += CONFIG.pricePerLevel.tier21_40;
-                    baseHours += CONFIG.hoursPerLevel.tier21_40;
-                } else if (lvl <= 50) {
-                    basePrice += CONFIG.pricePerLevel.tier41_50;
-                    baseHours += CONFIG.hoursPerLevel.tier41_50;
+                if (lvl < 10) {
+                    basePrice += CONFIG.stepIncrements.tier1_10;
+                    baseHours += 0.45;
+                } else if (lvl < 20) {
+                    basePrice += CONFIG.stepIncrements.tier10_20;
+                    baseHours += 0.80;
+                } else if (lvl < 30) {
+                    basePrice += CONFIG.stepIncrements.tier20_30;
+                    baseHours += 1.50;
+                } else if (lvl < 35) {
+                    basePrice += CONFIG.stepIncrements.tier30_35;
+                    baseHours += 2.00;
+                } else if (lvl < 40) {
+                    basePrice += CONFIG.stepIncrements.tier35_40;
+                    baseHours += 2.20;
+                } else if (lvl < 50) {
+                    basePrice += CONFIG.stepIncrements.tier40_50;
+                    baseHours += 2.40;
                 } else {
-                    basePrice += CONFIG.pricePerLevel.tier51_60;
-                    baseHours += CONFIG.hoursPerLevel.tier51_60;
+                    basePrice += CONFIG.stepIncrements.tier50_60;
+                    baseHours += 3.50;
                 }
             }
+
+            // Terapkan diskon penurunan base price 10%
+            let discountedBase = basePrice * CONFIG.basePriceDiscount;
 
             let multiplier = 1.0;
             if (isExpress) { multiplier += CONFIG.addons.expressMultiplier; baseHours *= 0.70; }
             if (isStream) { multiplier += CONFIG.addons.streamMultiplier; }
 
+            const subtotal = discountedBase * multiplier;
+            // Terapkan promo diskon tambahan 10%
+            const finalPrice = subtotal * (1 - (CONFIG.launchDiscountPercent / 100));
+
             return {
-                price: (basePrice * multiplier).toFixed(2),
+                originalPrice: (subtotal).toFixed(2),
+                price: (finalPrice).toFixed(2),
                 hours: Math.max(1, Math.round(baseHours))
             };
         }
@@ -741,6 +791,7 @@
             document.getElementById('summaryRegionFaction').textContent = `${state.region} • ${state.faction}`;
             document.getElementById('summaryClass').textContent = state.charClass;
             document.getElementById('summaryEstTime').textContent = formatDuration(metrics.hours);
+            document.getElementById('summaryOriginalPrice').textContent = `${CONFIG.currencySymbol}${metrics.originalPrice}`;
             document.getElementById('summaryPrice').textContent = `${CONFIG.currencySymbol}${metrics.price}`;
         }
 
