@@ -708,7 +708,7 @@
             document.getElementById('desiredLevelInput').value = state.desiredLevel;
         }
 
-        // Kalkulasi harga + estimasi waktu realistis (~14 hari untuk 1-60)
+        // Kalkulasi harga + estimasi waktu PAS 14 hari (336 jam) untuk 1-60
         function calculateBoostMetrics(startLvl, endLvl, isExpress, isStream) {
             let basePrice = 0;
             let baseHours = 0;
@@ -723,25 +723,25 @@
             for (let lvl = startLvl; lvl < endLvl; lvl++) {
                 if (lvl < 10) {
                     basePrice += CONFIG.stepIncrements.tier1_10;
-                    baseHours += 1.5;
+                    baseHours += 1.0;   // 9 lvl * 1.0 = 9.0 jam
                 } else if (lvl < 20) {
                     basePrice += CONFIG.stepIncrements.tier10_20;
-                    baseHours += 3.0;
+                    baseHours += 2.0;   // 10 lvl * 2.0 = 20.0 jam
                 } else if (lvl < 30) {
                     basePrice += CONFIG.stepIncrements.tier20_30;
-                    baseHours += 5.0;
+                    baseHours += 3.0;   // 10 lvl * 3.0 = 30.0 jam
                 } else if (lvl < 35) {
                     basePrice += CONFIG.stepIncrements.tier30_35;
-                    baseHours += 7.5;
+                    baseHours += 4.5;   // 5 lvl * 4.5 = 22.5 jam
                 } else if (lvl < 40) {
                     basePrice += CONFIG.stepIncrements.tier35_40;
-                    baseHours += 9.0;
+                    baseHours += 6.0;   // 5 lvl * 6.0 = 30.0 jam
                 } else if (lvl < 50) {
                     basePrice += CONFIG.stepIncrements.tier40_50;
-                    baseHours += 11.0;
+                    baseHours += 8.45;  // 10 lvl * 8.45 = 84.5 jam
                 } else {
                     basePrice += CONFIG.stepIncrements.tier50_60;
-                    baseHours += 11.5;
+                    baseHours += 14.0;  // 10 lvl * 14.0 = 140.0 jam (Total 1-60 = 336 jam = 14 hari pas)
                 }
             }
 
