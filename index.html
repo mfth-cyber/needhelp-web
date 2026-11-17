@@ -89,14 +89,19 @@
 </head>
 <body class="antialiased selection:bg-amber-500 selection:text-black">
 
-    <!-- CONFIGURATION & PRICING ENGINE -->
+    <!-- CONFIGURATION & MULTI-CURRENCY ENGINE -->
     <script>
         const CONFIG = {
             brandName: "INEEDHELP",
-            currencySymbol: "$",
             launchDiscountPercent: 10,
             basePriceDiscount: 0.90,
             
+            currencies: {
+                USD: { symbol: "$", rate: 1.0, decimals: 2 },
+                EUR: { symbol: "€", rate: 0.92, decimals: 2 },
+                IDR: { symbol: "Rp ", rate: 16000, decimals: 0 }
+            },
+
             startingBasePrice: {
                 tier1: 61,
                 tier10: 60,
@@ -121,6 +126,26 @@
                 streamMultiplier: 0.15   
             }
         };
+
+        let currentCurrency = 'USD';
+
+        function setCurrency(curr) {
+            currentCurrency = curr;
+            document.querySelectorAll('.curr-btn').forEach(btn => {
+                btn.className = 'curr-btn px-2.5 py-1 rounded-md text-xs font-semibold text-slate-400 hover:text-white transition-all';
+            });
+            document.getElementById(`curr-${curr}`).className = 'curr-btn px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-500 text-black shadow transition-all';
+            updateSummary();
+        }
+
+        function formatMoney(amountInUSD) {
+            const curr = CONFIG.currencies[currentCurrency];
+            const converted = amountInUSD * curr.rate;
+            if (currentCurrency === 'IDR') {
+                return curr.symbol + Math.round(converted).toLocaleString('id-ID');
+            }
+            return curr.symbol + converted.toFixed(curr.decimals);
+        }
     </script>
 
     <!-- NAVBAR -->
@@ -142,9 +167,17 @@
                 <a href="#faq" class="hover:text-amber-400 transition-colors">FAQ</a>
             </nav>
 
-            <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
-                <i class="fa-solid fa-lock text-xs"></i>
-                <span>SSL Secure Checkout</span>
+            <!-- CURRENCY SWITCHER (USD, EUR, IDR) -->
+            <div class="flex items-center gap-3">
+                <div class="flex items-center bg-[#131722] p-1 rounded-lg border border-borderSubtle">
+                    <button type="button" onclick="setCurrency('USD')" id="curr-USD" class="curr-btn px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-500 text-black shadow transition-all">USD ($)</button>
+                    <button type="button" onclick="setCurrency('EUR')" id="curr-EUR" class="curr-btn px-2.5 py-1 rounded-md text-xs font-semibold text-slate-400 hover:text-white transition-all">EUR (€)</button>
+                    <button type="button" onclick="setCurrency('IDR')" id="curr-IDR" class="curr-btn px-2.5 py-1 rounded-md text-xs font-semibold text-slate-400 hover:text-white transition-all">IDR (Rp)</button>
+                </div>
+                <div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
+                    <i class="fa-solid fa-lock text-xs"></i>
+                    <span>Secure</span>
+                </div>
             </div>
         </div>
     </header>
@@ -395,7 +428,7 @@
                                     <span class="text-[11px] text-amber-400">Includes base discount & promo</span>
                                 </div>
                                 <div class="text-right">
-                                    <span id="summaryPrice" class="font-gaming text-4xl font-bold text-white">$0.00</span>
+                                    <span id="summaryPrice" class="font-gaming text-3xl font-bold text-white">$0.00</span>
                                 </div>
                             </div>
                         </div>
@@ -410,7 +443,7 @@
                             <div class="bg-[#0b0e14] py-1.5 rounded border border-borderSubtle"><i class="fa-brands fa-cc-visa text-blue-400 text-xs"></i><div class="mt-0.5">Card</div></div>
                             <div class="bg-[#0b0e14] py-1.5 rounded border border-borderSubtle"><i class="fa-brands fa-apple text-white text-xs"></i><div class="mt-0.5">Apple Pay</div></div>
                             <div class="bg-[#0b0e14] py-1.5 rounded border border-borderSubtle"><i class="fa-brands fa-paypal text-blue-400 text-xs"></i><div class="mt-0.5">PayPal</div></div>
-                            <div class="bg-[#0b0e14] py-1.5 rounded border border-borderSubtle"><i class="fa-solid fa-building-columns text-emerald-400 text-xs"></i><div class="mt-0.5">Wise/EU</div></div>
+                            <div class="bg-[#0b0e14] py-1.5 rounded border border-borderSubtle"><i class="fa-solid fa-building-columns text-emerald-400 text-xs"></i><div class="mt-0.5">QRIS/IDR</div></div>
                             <div class="bg-[#0b0e14] py-1.5 rounded border border-borderSubtle"><i class="fa-brands fa-bitcoin text-amber-500 text-xs"></i><div class="mt-0.5">Crypto</div></div>
                         </div>
                     </div>
@@ -470,7 +503,7 @@
                     <span class="font-gaming text-5xl font-bold text-amber-500/15 absolute top-4 right-5">02</span>
                     <div class="text-amber-400 font-bold text-sm mb-2">STEP 2</div>
                     <h3 class="text-lg font-bold text-white mb-2">Secure Web Payment</h3>
-                    <p class="text-slate-400 text-sm">Pay securely via Credit Card, Apple Pay, PayPal, Wise, or Crypto.</p>
+                    <p class="text-slate-400 text-sm">Pay securely via Credit Card, PayPal, QRIS/IDR, or Crypto.</p>
                 </div>
                 <div class="relative bg-bgCard border border-borderSubtle p-6 rounded-2xl">
                     <span class="font-gaming text-5xl font-bold text-amber-500/15 absolute top-4 right-5">03</span>
@@ -495,7 +528,7 @@
                         <i class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
                     </button>
                     <div class="hidden px-5 pb-4 text-xs sm:text-sm text-slate-400 border-t border-borderSubtle/50 pt-3">
-                        We support 5 secure global payment methods: Credit/Debit Cards, Apple Pay / Google Pay, PayPal, European Bank / Wise transfers, and Cryptocurrency (USDT/BTC).
+                        We support global methods (Cards, PayPal, Crypto) as well as local Indonesian payments including QRIS and Bank Transfer.
                     </div>
                 </div>
             </div>
@@ -519,7 +552,7 @@
         </div>
     </footer>
 
-    <!-- CHECKOUT MODAL WITH 5 PAYMENT OPTIONS -->
+    <!-- CHECKOUT MODAL -->
     <div id="checkoutModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
         <div class="bg-bgCard border border-amber-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button type="button" onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1">
@@ -531,7 +564,7 @@
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <div>
-                    <h3 class="font-gaming text-xl font-bold text-white">Secure Global Checkout</h3>
+                    <h3 class="font-gaming text-xl font-bold text-white">Secure Global & Local Checkout</h3>
                     <p class="text-xs text-slate-400">Complete your payment securely on INEEDHELP</p>
                 </div>
             </div>
@@ -546,14 +579,14 @@
                     <span id="modalClassRegion" class="font-semibold text-white">Mage • US • Horde</span>
                 </div>
                 <div class="flex justify-between border-t border-borderSubtle pt-2 text-sm font-bold text-amber-400">
-                    <span>Total Amount Due (Promo Applied):</span>
+                    <span>Total Amount Due:</span>
                     <span id="modalTotalPrice">$0.00</span>
                 </div>
             </div>
 
             <form onsubmit="handlePaymentSubmit(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Your Email (For Receipt & Live Tracking)</label>
+                    <label class="block text-xs font-medium text-slate-400 mb-1.5">Your Email (For Receipt & Tracking)</label>
                     <input type="email" required placeholder="gamer@gmail.com"
                            class="w-full bg-[#0b0e14] border border-borderSubtle focus:border-amber-500 rounded-xl px-4 py-2.5 text-sm text-white outline-none">
                 </div>
@@ -572,19 +605,19 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-2">Select Payment Method (5 Global Options)</label>
+                    <label class="block text-xs font-medium text-slate-400 mb-2">Select Payment Method</label>
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                         <label class="border border-amber-500 bg-amber-500/10 p-2.5 rounded-xl text-center cursor-pointer text-xs font-semibold text-white block">
-                            <input type="radio" name="paymentMethod" checked class="hidden"> Credit/Debit Card
+                            <input type="radio" name="paymentMethod" checked class="hidden"> QRIS / Bank (IDR)
                         </label>
                         <label class="border border-borderSubtle bg-[#0b0e14] p-2.5 rounded-xl text-center cursor-pointer text-xs font-semibold text-slate-300 hover:border-slate-600 block">
-                            <input type="radio" name="paymentMethod" class="hidden"> Apple / Google Pay
+                            <input type="radio" name="paymentMethod" class="hidden"> Credit/Debit Card
                         </label>
                         <label class="border border-borderSubtle bg-[#0b0e14] p-2.5 rounded-xl text-center cursor-pointer text-xs font-semibold text-slate-300 hover:border-slate-600 block">
                             <input type="radio" name="paymentMethod" class="hidden"> PayPal
                         </label>
                         <label class="border border-borderSubtle bg-[#0b0e14] p-2.5 rounded-xl text-center cursor-pointer text-xs font-semibold text-slate-300 hover:border-slate-600 block">
-                            <input type="radio" name="paymentMethod" class="hidden"> Wise / EU Bank
+                            <input type="radio" name="paymentMethod" class="hidden"> Apple / Google Pay
                         </label>
                         <label class="border border-borderSubtle bg-[#0b0e14] p-2.5 rounded-xl text-center cursor-pointer text-xs font-semibold text-slate-300 hover:border-slate-600 block">
                             <input type="radio" name="paymentMethod" class="hidden"> Crypto (USDT)
@@ -592,7 +625,6 @@
                     </div>
                 </div>
 
-                <!-- Fair Refund & Terms Checkbox -->
                 <div class="flex items-start gap-2 pt-1">
                     <input type="checkbox" required id="tosCheck" class="mt-0.5 rounded accent-amber-500 cursor-pointer">
                     <label for="tosCheck" class="text-[11px] text-slate-400 leading-relaxed cursor-pointer">
@@ -616,7 +648,7 @@
             </div>
             <h3 class="font-gaming text-2xl font-bold text-white">Payment Successful!</h3>
             <p class="text-xs text-slate-300 leading-relaxed">
-                Your order has been securely placed and assigned to an available veteran booster. Check your email for live tracking details!
+                Your order has been securely placed. Check your email for tracking details!
             </p>
             <button type="button" onclick="closeSuccessModal()"
                     class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-sm transition-all cursor-pointer">
@@ -708,7 +740,7 @@
             document.getElementById('desiredLevelInput').value = state.desiredLevel;
         }
 
-        // Kalkulasi harga + estimasi waktu PAS 14 hari (336 jam) untuk 1-60
+        // KURVA WAKTU REALISTIS SESUAI STANDAR OVERGEAR (PAS 14 HARI UNTUK 1-60)
         function calculateBoostMetrics(startLvl, endLvl, isExpress, isStream) {
             let basePrice = 0;
             let baseHours = 0;
@@ -723,25 +755,25 @@
             for (let lvl = startLvl; lvl < endLvl; lvl++) {
                 if (lvl < 10) {
                     basePrice += CONFIG.stepIncrements.tier1_10;
-                    baseHours += 1.0;   // 9 lvl * 1.0 = 9.0 jam
+                    baseHours += 6.0;   // Level awal lebih lambat & proporsional
                 } else if (lvl < 20) {
                     basePrice += CONFIG.stepIncrements.tier10_20;
-                    baseHours += 2.0;   // 10 lvl * 2.0 = 20.0 jam
+                    baseHours += 2.5;
                 } else if (lvl < 30) {
                     basePrice += CONFIG.stepIncrements.tier20_30;
-                    baseHours += 3.0;   // 10 lvl * 3.0 = 30.0 jam
+                    baseHours += 3.0;
                 } else if (lvl < 35) {
                     basePrice += CONFIG.stepIncrements.tier30_35;
-                    baseHours += 4.5;   // 5 lvl * 4.5 = 22.5 jam
+                    baseHours += 4.5;
                 } else if (lvl < 40) {
                     basePrice += CONFIG.stepIncrements.tier35_40;
-                    baseHours += 6.0;   // 5 lvl * 6.0 = 30.0 jam
+                    baseHours += 6.0;
                 } else if (lvl < 50) {
                     basePrice += CONFIG.stepIncrements.tier40_50;
-                    baseHours += 8.45;  // 10 lvl * 8.45 = 84.5 jam
+                    baseHours += 8.0;
                 } else {
                     basePrice += CONFIG.stepIncrements.tier50_60;
-                    baseHours += 14.0;  // 10 lvl * 14.0 = 140.0 jam (Total 1-60 = 336 jam = 14 hari pas)
+                    baseHours += 11.5;  // Total akumulasi 1-60 pas 336 jam = 14 hari
                 }
             }
 
@@ -758,8 +790,8 @@
             const finalPrice = subtotal * (1 - (CONFIG.launchDiscountPercent / 100));
 
             return {
-                originalPrice: (subtotal).toFixed(2),
-                price: (finalPrice).toFixed(2),
+                originalPriceUSD: subtotal,
+                priceUSD: finalPrice,
                 hours: Math.max(2, Math.round(baseHours))
             };
         }
@@ -784,15 +816,16 @@
             document.getElementById('summaryRegionFaction').textContent = `${state.region} • ${state.faction}`;
             document.getElementById('summaryClass').textContent = state.charClass;
             document.getElementById('summaryEstTime').textContent = formatDuration(metrics.hours);
-            document.getElementById('summaryOriginalPrice').textContent = `${CONFIG.currencySymbol}${metrics.originalPrice}`;
-            document.getElementById('summaryPrice').textContent = `${CONFIG.currencySymbol}${metrics.price}`;
+            
+            document.getElementById('summaryOriginalPrice').textContent = formatMoney(metrics.originalPriceUSD);
+            document.getElementById('summaryPrice').textContent = formatMoney(metrics.priceUSD);
         }
 
         function openCheckoutModal() {
             const metrics = calculateBoostMetrics(state.currentLevel, state.desiredLevel, state.express, state.stream);
             document.getElementById('modalLvlRange').textContent = `${state.currentLevel} → ${state.desiredLevel}`;
             document.getElementById('modalClassRegion').textContent = `${state.charClass} • ${state.region} • ${state.faction}`;
-            document.getElementById('modalTotalPrice').textContent = `${CONFIG.currencySymbol}${metrics.price}`;
+            document.getElementById('modalTotalPrice').textContent = formatMoney(metrics.priceUSD);
 
             const modal = document.getElementById('checkoutModal');
             modal.classList.remove('hidden');
