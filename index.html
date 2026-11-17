@@ -740,7 +740,7 @@
             document.getElementById('desiredLevelInput').value = state.desiredLevel;
         }
 
-        // KURVA WAKTU REALISTIS SESUAI STANDAR OVERGEAR (PAS 14 HARI UNTUK 1-60)
+        // KURVA WAKTU SESUAI STANDAR OVERGEAR (1-10 CEPAT, AKUMULASI 1-60 PAS 14 HARI)
         function calculateBoostMetrics(startLvl, endLvl, isExpress, isStream) {
             let basePrice = 0;
             let baseHours = 0;
@@ -755,19 +755,19 @@
             for (let lvl = startLvl; lvl < endLvl; lvl++) {
                 if (lvl < 10) {
                     basePrice += CONFIG.stepIncrements.tier1_10;
-                    baseHours += 6.0;   // Level awal lebih lambat & proporsional
+                    baseHours += 0.8;   // Level 1-10 cepat (~8 jam total untuk 9 level)
                 } else if (lvl < 20) {
                     basePrice += CONFIG.stepIncrements.tier10_20;
-                    baseHours += 2.5;
+                    baseHours += 2.2;
                 } else if (lvl < 30) {
                     basePrice += CONFIG.stepIncrements.tier20_30;
-                    baseHours += 3.0;
+                    baseHours += 3.5;
                 } else if (lvl < 35) {
                     basePrice += CONFIG.stepIncrements.tier30_35;
-                    baseHours += 4.5;
+                    baseHours += 5.0;
                 } else if (lvl < 40) {
                     basePrice += CONFIG.stepIncrements.tier35_40;
-                    baseHours += 6.0;
+                    baseHours += 6.5;
                 } else if (lvl < 50) {
                     basePrice += CONFIG.stepIncrements.tier40_50;
                     baseHours += 8.0;
