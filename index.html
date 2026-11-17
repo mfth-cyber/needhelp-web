@@ -740,7 +740,7 @@
             document.getElementById('desiredLevelInput').value = state.desiredLevel;
         }
 
-        // KURVA WAKTU SESUAI STANDAR OVERGEAR (1-10 CEPAT, AKUMULASI 1-60 PAS 14 HARI)
+        // KURVA WAKTU PRESISI (1-10 TEPAT 4 JAM, 1-60 PAS 14 HARI / 336 JAM)
         function calculateBoostMetrics(startLvl, endLvl, isExpress, isStream) {
             let basePrice = 0;
             let baseHours = 0;
@@ -755,25 +755,25 @@
             for (let lvl = startLvl; lvl < endLvl; lvl++) {
                 if (lvl < 10) {
                     basePrice += CONFIG.stepIncrements.tier1_10;
-                    baseHours += 0.8;   // Level 1-10 cepat (~8 jam total untuk 9 level)
+                    baseHours += 0.444; // 9 level * 0.444 = ~4 jam untuk 1-10
                 } else if (lvl < 20) {
                     basePrice += CONFIG.stepIncrements.tier10_20;
-                    baseHours += 2.2;
+                    baseHours += 2.0;   // 10 level * 2.0 = 20 jam
                 } else if (lvl < 30) {
                     basePrice += CONFIG.stepIncrements.tier20_30;
-                    baseHours += 3.5;
+                    baseHours += 3.2;   // 10 level * 3.2 = 32 jam
                 } else if (lvl < 35) {
                     basePrice += CONFIG.stepIncrements.tier30_35;
-                    baseHours += 5.0;
+                    baseHours += 5.0;   // 5 level * 5.0 = 25 jam
                 } else if (lvl < 40) {
                     basePrice += CONFIG.stepIncrements.tier35_40;
-                    baseHours += 6.5;
+                    baseHours += 7.0;   // 5 level * 7.0 = 35 jam
                 } else if (lvl < 50) {
                     basePrice += CONFIG.stepIncrements.tier40_50;
-                    baseHours += 8.0;
+                    baseHours += 9.0;   // 10 level * 9.0 = 90 jam
                 } else {
                     basePrice += CONFIG.stepIncrements.tier50_60;
-                    baseHours += 11.5;  // Total akumulasi 1-60 pas 336 jam = 14 hari
+                    baseHours += 13.0;  // 10 level * 13.0 = 130 jam (Total 1-60 pas 336 jam = 14 hari)
                 }
             }
 
